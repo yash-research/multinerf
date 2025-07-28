@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiNeRF: Multiple Watermark Embedding for Neural Radiance Fields</title>
+    <meta name="description" content="A 3D watermarking method that embeds multiple uniquely keyed watermarks within images rendered by a single Neural Radiance Field (NeRF) model, whilst maintaining high visual quality.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- KaTeX CSS for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <!-- Title and Authors -->
+        <header>
+            <h1>MultiNeRF: Multiple Watermark Embedding for Neural Radiance Fields</h1>
+            <div class="conference">
+                ICCV Workshop on Authenticity & Provenance in the Age of Generative AI (APAI), 2025
+            </div>
+            
+            <div class="authors">
+                <div class="author">
+                    <span class="author-name">Yash Kulthe</span><sup>1</sup>
+               
+                </div>
+                
+                <div class="author">
+                    <span class="author-name">Andrew Gilbert</span><sup>1</sup>
+                 
+                </div>
+                
+                <div class="author">
+                    <span class="author-name">John Collomosse</span><sup>1,2</sup>
+                
+                </div>
+            </div>
+            
+            <div class="author-notes">
+                <sup>1</sup>CVSSP, University of Surrey, UK &nbsp;&nbsp; <sup>2</sup>Adobe Research
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <a href="#" class="research-button">📄 Paper</a>
+                <a href="#" class="research-button">💻 Code</a>
+                <a href="https://arxiv.org/abs/2504.02517" class="research-button">📚 arXiv</a>
+                <a href="iccvw_sup_mat.pdf" class="research-button">📋 Sup. Mat.</a>
+            </div>
+        </header>
+
+        <!-- Introduction Figure -->
+        <section>
+            <figure class="research-figure">
+                <img src="images/introduction.png" alt="MultiNeRF introduction and overview" class="figure-image">
+                <figcaption>MultiNeRF embeds multiple watermarks within the representation learned by a NeRF model at training time. Watermarks are keyed by a unique ID specified at rendering time to trigger the embedding of the watermark into the image independent of the viewing position.</figcaption>
+            </figure>
+        </section>
+
+        <!-- Abstract -->
+        <section>
+            <h2>Abstract</h2>
+            <p>We present <strong>MultiNeRF</strong>, a 3D watermarking method that embeds multiple uniquely keyed watermarks within images rendered by a single Neural Radiance Field (NeRF) model, whilst maintaining high visual quality. Our approach extends the TensoRF NeRF model by incorporating a dedicated watermark grid alongside the existing geometry and appearance grids.</p>
+            
+            <p>This extension ensures higher watermark capacity without entangling watermark signals with scene content. We propose a <em>FiLM-based conditional modulation</em> mechanism that dynamically activates watermarks based on input identifiers, allowing multiple independent watermarks to be embedded and extracted without requiring model retraining. MultiNeRF is validated on the NeRF-Synthetic and LLFF datasets, with statistically significant improvements in robust capacity without compromising rendering quality. By generalizing single-watermark NeRF methods into a flexible multi-watermarking framework, MultiNeRF provides a scalable solution for 3D content attribution.</p>
+        </section>
+
+       
+
+        <!-- Heading levels -->
+        <section>
+            <h2>Key Contributions</h2>
+            
+            <h3>Dedicated Watermark Grid</h3>
+            <p>We introduce a dedicated watermark grid alongside existing geometry and appearance grids, preventing entanglement of watermark signals with scene content while improving capacity.</p>
+            <p>Our method introduces a novel architecture for embedding multiple watermarks in Neural Radiance Fields.</p>
+            
+            <figure class="research-figure">
+                <img src="images/architecture.png" alt="MultiNeRF architecture diagram" class="figure-image">
+                <figcaption>MultiNeRF extends TensoRF by introducing a watermark grid alongside the geometry and appearance grids. Unique watermark IDs are encoded via a learnable embedding network and modulated using FiLM-based conditioning.</figcaption>
+            </figure>
+            <h4>FiLM-based Conditional Modulation</h4>
+            <p>Our method uses Feature-wise Linear Modulation (FiLM) to dynamically activate watermarks based on input identifiers, enabling multiple independent watermarks without model retraining. The watermark embedding process uses FiLM-based modulation where the embedding vector <span class="math-inline">e_n = \text{Emb}(I^{(n)})</span> is transformed into modulation parameters, which are then used to modulate the watermark features.</p>
+            <div class="math-block">
+                w'(x) = \gamma_n \odot w(x) + \beta_n
+            </div>
+            <p>The final watermarked color is computed by integrating the modulated watermark features with the appearance grid:</p>
+            
+            <div class="math-block">
+                \tilde{c}(x) = S(G_c(x), w'(x), d)
+            </div>
+
+        </section>
+
+        <!-- Training Figure -->
+        <section>
+            <figure class="research-figure">
+                <img src="images/training.png" alt="MultiNeRF training process and architecture" class="figure-image">
+                <figcaption>MultiNeRF training process.</figcaption>
+            </figure>
+        </section>
+
+        <!-- Tables -->
+        <section>
+            <h2>Results</h2>
+            <p>Performance comparison for single watermark embedding:</p>
+            
+            <figure class="research-figure">
+                <img src="images/single_bit_acc.png" alt="Single watermark bit accuracy comparison" class="figure-image">
+                <figcaption>Single watermark embedding performance across different methods on NeRF-Synthetic and LLFF datasets.</figcaption>
+            </figure>
+
+            <p>Performance comparison for multiple watermark embedding:</p>
+            
+            <figure class="research-figure">
+                <img src="images/multiple_bit_acc.png" alt="Multiple watermark bit accuracy comparison" class="figure-image">
+                <figcaption>Multiple watermark embedding performance showing MultiNeRF's superior scalability compared to baseline methods.</figcaption>
+            </figure>
+        </section>
+
+        <figure class="research-figure">
+            <div class="image-comparison" id="imageComparison">
+                <div class="comparison-container">
+                    <img src="images/waterf_mod.png" alt="WateRF-modified method results" class="comparison-image base-image">
+                    <img src="images/multinerf.png" alt="MultiNeRF method results" class="comparison-image overlay-image" id="overlayImage">
+                    <div class="comparison-slider" id="comparisonSlider">
+                        <div class="slider-button"></div>
+                    </div>
+                    <div class="comparison-labels">
+                        <span class="comparison-label left-label">MultiNeRF (Ours)</span>
+                        <span class="comparison-label right-label">WateRF-modified</span>
+                    </div>
+                </div>
+            </div>
+            <figcaption>Interactive comparison between MultiNeRF and WateRF-modified methods. Drag the slider to compare performance - MultiNeRF shows significantly better multi-watermark embedding capabilities. (Check out the reflections and the watermark artifacts in the waterf-modified image)</figcaption>
+        </figure>
+
+        <!-- Robustness Evaluation -->
+        <section>
+            <h2>Robustness to Attacks</h2>
+            <p>We evaluate the robustness of our method against various removal attacks including diffusion-based regeneration and VAE-based attacks.</p>
+            
+            <figure class="research-figure">
+                <img src="images/removal_attack.png" alt="Robustness evaluation under removal attacks" class="figure-image">
+                <figcaption>Robustness evaluation showing MultiNeRF-noised (MN-noised) significantly outperforms baseline methods under various removal attacks.</figcaption>
+            </figure>
+        </section>
+
+        <!-- BibTeX Citation -->
+        <section>
+            <h2>BibTeX citation</h2>
+            <div class="bibtex-block">
+@article{kulthe2025multinerf,
+  title={MultiNeRF: Multiple Watermark Embedding for Neural Radiance Fields},
+  author={Kulthe, Yash and Gilbert, Andrew and Collomosse, John},
+  journal={arXiv preprint arXiv:2504.02517},
+  year={2025}
+}
+            </div>
+        </section>
+    </main>
+
+    <!-- KaTeX JavaScript for math rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html> 
